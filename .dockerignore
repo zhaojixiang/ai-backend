@@ -1,0 +1,15 @@
+node_modules
+dist
+storage
+.git
+.env
+.env.*
+!.env.example
+coverage
+.vscode
+.idea
+*.log
+pnpm-debug.log*
+python/venv
+**/*.spec.ts
+test

@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    image: ai-backend:latest
+    ports:
+      # 宿主机端口:容器内端口（应用进程内固定监听 3000，与 Dockerfile HEALTHCHECK 一致）
+      - "${HOST_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: "3000"
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:3000}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      SERVE_STORAGE: ${SERVE_STORAGE:-true}
+      MAX_CONCURRENT_VIDEO_JOBS: ${MAX_CONCURRENT_VIDEO_JOBS:-2}
+      DOWNLOAD_TIMEOUT_MS: ${DOWNLOAD_TIMEOUT_MS:-600000}
+      FFMPEG_TIMEOUT_MS: ${FFMPEG_TIMEOUT_MS:-3600000}
+      PYTHON_BIN: ${PYTHON_BIN:-/app/python/venv/bin/python}
+    volumes:
+      - storage_data:/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  storage_data:
