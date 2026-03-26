@@ -35,8 +35,8 @@ COPY python/requirements.txt ./python/requirements.txt
 COPY python/scripts ./python/scripts
 
 RUN python3 -m venv /app/python/venv \
-  && /app/python/venv/bin/pip install --no-cache-dir --upgrade pip \
-  && /app/python/venv/bin/pip install --no-cache-dir -r python/requirements.txt
+  && /app/python/venv/bin/pip install --no-cache-dir --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && /app/python/venv/bin/pip install --no-cache-dir -r python/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 RUN corepack enable && corepack prepare pnpm@9 --activate
 
