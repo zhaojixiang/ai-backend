@@ -28,8 +28,8 @@ RUN apt-get update \
     libgomp1 \
   && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --no-cache-dir --break-system-packages yt-dlp \
-  && yt-dlp --version
+RUN python3 -m pip install --no-cache-dir --break-system-packages -i https://pypi.tuna.tsinghua.edu.cn/simple yt-dlp \
+&& yt-dlp --version
 
 COPY python/requirements.txt ./python/requirements.txt
 COPY python/scripts ./python/scripts
