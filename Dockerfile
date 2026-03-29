@@ -14,6 +14,10 @@ RUN pnpm run build
 
 FROM node:20-bookworm-slim AS runner
 
+ARG GIT_SHA
+LABEL org.opencontainers.image.title="ai-backend" \
+  org.opencontainers.image.revision="${GIT_SHA}"
+
 WORKDIR /app
 
 RUN apt-get update \
