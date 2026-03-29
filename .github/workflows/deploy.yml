@@ -27,10 +27,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ai-backend:latest
-            ${{ secrets.DOCKER_USERNAME }}/ai-backend:${{ github.sha }}
-          build-args: |
-            VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+            ${{ secrets.DOCKER_USERNAME }}/ai-frount:latest
+            ${{ secrets.DOCKER_USERNAME }}/ai-frount:${{ github.sha }}
 
       # 4️⃣ 部署到服务器（核心）
       - name: Deploy to Server
@@ -44,40 +42,13 @@ jobs:
             cd ~/jjtools
 
             echo "==== 更新 backend 镜像版本 ===="
-            sed -i "s|ai-frount:.*|ai-frount:${{ github.sha }}|g" docker-compose.yml
+            sed -i "s|ai-backend:.*|ai-backend:${{ github.sha }}|g" docker-compose.yml
 
             echo "==== 拉取新镜像 ===="
             docker compose pull backend
 
-            echo "==== 重启 frount ===="
+            echo "==== 重启 backend ===="
             docker compose up -d backend
 
             echo "==== 当前版本 ===="
             docker ps | grep ai-backend
-
-deploy:
-  needs: build-backend
-  runs-on: ubuntu-latest
-
-  steps:
-    - name: Deploy to Server
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          set -e
-          cd ~/jjtools
-
-          echo "==== 更新 backend 镜像版本 ===="
-          sed -i "s|ai-backend:.*|ai-backend:${{ github.sha }}|g" docker-compose.yml
-
-          echo "==== 拉取新镜像 ===="
-          docker compose pull backend
-
-          echo "==== 重启 backend ===="
-          docker compose up -d backend
-
-          echo "==== 当前版本 ===="
-          docker ps | grep ai-backend
