@@ -27,8 +27,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ai-frount:latest
-            ${{ secrets.DOCKER_USERNAME }}/ai-frount:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/ai-backend:latest
+            ${{ secrets.DOCKER_USERNAME }}/ai-backend:${{ github.sha }}
 
       # 4️⃣ 部署到服务器（核心）
       - name: Deploy to Server
