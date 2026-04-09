@@ -17,6 +17,9 @@ RUN pnpm run build
 FROM node:20-bookworm-slim AS runner
 
 ARG GIT_SHA=unknown
+# Default PyPI works from GitHub Actions / most regions. For China-local builds:
+# docker build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple ...
+ARG PIP_INDEX_URL=https://pypi.org/simple
 LABEL org.opencontainers.image.title="ai-backend" \
       org.opencontainers.image.revision="${GIT_SHA}"
 
@@ -34,15 +37,15 @@ RUN apt-get update \
     libgomp1 \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --no-cache-dir --break-system-packages -i https://pypi.tuna.tsinghua.edu.cn/simple yt-dlp \
+RUN python3 -m pip install --no-cache-dir --break-system-packages -i "${PIP_INDEX_URL}" yt-dlp \
  && yt-dlp --version
 
 COPY python/requirements.txt ./python/requirements.txt
 COPY python/scripts ./python/scripts
 
 RUN python3 -m venv /app/python/venv \
- && /app/python/venv/bin/pip install --no-cache-dir --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple \
- && /app/python/venv/bin/pip install --no-cache-dir -r python/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+ && /app/python/venv/bin/pip install --no-cache-dir --upgrade pip -i "${PIP_INDEX_URL}" \
+ && /app/python/venv/bin/pip install --no-cache-dir -r python/requirements.txt -i "${PIP_INDEX_URL}"
 
 RUN corepack enable && corepack prepare pnpm@9 --activate
 
