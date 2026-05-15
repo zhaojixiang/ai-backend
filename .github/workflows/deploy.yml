@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  REGISTRY: crpi-3iew34pvm0fklze5.cn-chengdu.personal.cr.aliyuncs.com
-  NAMESPACE: jijiking1
+  REGISTRY: crpi-qutwiex8418js1ga.cn-chengdu.personal.cr.aliyuncs.com
+  NAMESPACE: jjkingtools
   IMAGE_NAME: ai-backend
 
 jobs:
